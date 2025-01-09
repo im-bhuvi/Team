@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.bass.Bassclass;
+import org.bass.POM;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -18,7 +19,8 @@ import io.cucumber.java.en.*;
 
 public class FlightSteps extends Bassclass {
 	Robot r;
-	int count=0;
+	List<String> li;
+	POM p;
 	@Given("The user should be in Kayak home page")
 	public void the_user_should_be_in_kayak_home_page() {
 		String currenturl = currenturl();
@@ -29,33 +31,24 @@ public class FlightSteps extends Bassclass {
 	}
 	@When("The user has to select the flight and One way")
 	public void the_user_has_to_select_the_flight_and_one_way() throws AWTException, InterruptedException {
-		WebElement options = driver.findElement(By.xpath("//div[@class='c15uy c15uy-mod-variant-default']"));
-		options.click();
-		
-     	WebElement oneway = driver.findElement(By.xpath("(//li[@role='option'])[2]"));
-     	oneway.click();
+		 p=new POM();
+		p.getOptions().click();
+		p.getOneway().click();
 	}
 	@Then("The user has to enter From and To")
 	public void the_user_has_to_enter_from_and_to() throws AWTException {
-		WebElement close = driver.findElement(By.xpath("//div[@class='c_neb-item-close']"));
-		close.click();
-		
-		WebElement from = driver.findElement(By.xpath("(//input[@type='text'])[2]"));
-		sendkeys(from,"los");
+		p.getClose().click();
+		sendkeys(p.getFrom(),"los");	
 		WebElement element = driver.findElement(By.xpath("(//div[@class='vPgG-name-container'])[1]"));
 		click(element);
-		
-		WebElement To = driver.findElement(By.xpath("(//input[@type='text'])[3]"));
-		sendkeys(To, "new delhi");
+		sendkeys(p.getTO(),"new delhi");
 		WebElement element2 = driver.findElement(By.xpath("(//div[@class='vPgG-name-container'])[1]"));
 		element2.click();
-		
-		
+	
 	}
 	@Then("The user has to enter the date")
 	public void the_user_has_to_enter_the_date() {
-		WebElement jan = driver.findElement(By.xpath("(//div[@aria-label='1 January, 2025 Prices on this day are around average'])"));
-		jan.click();
+		p.getDate().click();
 	}
 	@Then("The user has to select the Travellers")
 	public void the_user_has_to_select_the_travellers() {
@@ -63,25 +56,24 @@ public class FlightSteps extends Bassclass {
 	}
 	@Then("click the search button")
 	public void click_the_search_button() {
-		WebElement search = driver.findElement(By.xpath("//button[@type='submit']"));
-		search.click();
+		p.getSearch().click();
 	}
 	@Then("The user has to select the choosen flight and click book")
 	public void the_user_has_to_select_the_choosen_flight_and_click_book() throws InterruptedException {
 		Set<String> windowHandles = driver.getWindowHandles();
-		List<String> li=new ArrayList<String>();
+		li=new ArrayList<String>();
 		li.addAll(windowHandles);
 		sleep(2000);
-		System.out.println(li.size());
-		if (li.size()>0) {
-			driver.switchTo().window(li.get(count));
-			count++;
+		if (li.size()>1) {
+			driver.switchTo().window(li.get(1));
+		
 			
 		}
-
+		System.out.println("handled");
 			sleep(8000);
-			WebElement viewdeal = driver.findElement(By.xpath("(//div[@class='oVHK'])[2]"));
+			WebElement viewdeal = driver.findElement(By.xpath("(//div[@class='oVHK'])[4]"));
 			viewdeal.click();
+			sleep(5000);
 			WebElement book = driver.findElement(By.xpath("(//div[@class='Iqt3-button-content'])[23]"));
 			book.click();
 			
@@ -93,9 +85,10 @@ public class FlightSteps extends Bassclass {
 
 		sleep(9000);
 		Set<String> windowHandles = driver.getWindowHandles();
-		List<String> li=new ArrayList<String>();
-		li.addAll(windowHandles);
-		driver.switchTo().window(li.get(count));
+		List<String> li2=new ArrayList<String>();
+		li2.addAll(windowHandles);
+			driver.switchTo().window(li2.get(2));
+		
 		WebElement select = driver.findElement(By.xpath("//button[@class='Actionable-module__root___ph-jy Button-module__root___RNgyk Button-module__root--variant-primary___3zF7+ Button-module__root--size-large___QzDFj Button-module__root--variant-primary-action___CWu4O']"));
 		select.click();
 	}
